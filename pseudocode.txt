@@ -1,0 +1,121 @@
+char keys[ROWS][COLS] = {
+  {'0','0','0'},
+  {'0','0','0'},
+  {'0','0','0'},
+};
+
+const char X = 'X';
+const char O = 'O';
+
+
+int main(){
+
+    bool win = false;
+    int count moves = 0;
+    char curr = O;
+
+    while (win == false) {
+
+        if(curr == O){
+
+            curr = X;
+
+        } else {
+
+            curr = O;
+
+        }
+
+        int input = detectpress();
+        
+
+        if(input == 1){
+
+            keys[0][0] = curr;
+
+        } else if(input == 2){
+
+            keys[0][1] = curr;
+
+        } else if(input == 3){
+
+            keys[0][2] = curr;
+
+        } else if(input == 4){
+
+            keys[1][0] = curr;
+
+        } else if(input == 5){
+
+            keys[1][1] = curr;
+
+        } else if(input == 6){
+
+            keys[1][2] = curr;
+
+        } else if(input == 7){
+
+            keys[2][0] = curr;
+
+        } else if(input == 8){
+        
+            keys[2][1] = curr;
+
+        } else if(input == 9){
+
+            keys[2][2] = curr;
+        
+        }
+
+        moves++;
+
+        if(keys[0][0] == keys[0][1] && keys[0][0] == keys[0][2]){
+
+            cout << keys[0][0] << " wins";
+            return 0;
+
+        } else if(keys[1][0] == keys[1][1] && keys[1][0] == keys[1][2]){
+
+            cout << keys[1][0] << " wins";
+            return 0;
+
+        } else if(keys[2][0] == keys[2][1] && keys[2][0] == keys[2][2]){
+
+            cout << keys[2][0] << " wins";
+            return 0;
+
+        } else if(keys[0][0] == keys[1][0] && keys[0][0] == keys[2][0]){
+
+            cout << keys[0][0] << " wins";
+            return 0;
+
+        } else if(keys[0][1] == keys[1][1] && keys[0][1] == keys[2][1]){
+
+            cout << keys[0][1] << " wins";
+            return 0;
+
+        } else if(keys[0][2] == keys[1][2] && keys[0][2] == keys[2][2]){
+
+            cout << keys[0][2] << " wins";
+            return 0;
+
+        } else if(keys[0][0] == keys[1][1] && keys[0][0] == keys[2][2]){
+
+            cout << keys[0][0] << " wins";
+            return 0;
+
+        } else if(keys[0][2] == keys[1][1] && keys[0][2] == keys[2][0]){
+
+            cout << keys[0][2] << " wins";
+            return 0;
+
+        } else if(moves == 9){
+
+            cout << "cats game";
+            return 0;
+
+        }
+
+    }
+
+}
