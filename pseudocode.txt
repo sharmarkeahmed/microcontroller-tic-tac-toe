@@ -28,7 +28,6 @@ int main(){
 
         int input = detectpress();
         
-
         if(input == 1){
 
             keys[0][0] = curr;
