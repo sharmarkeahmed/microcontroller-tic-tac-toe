@@ -10,37 +10,18 @@ int PIXEL_COUNT = 4; //FIXME: Change the pixel count to 6 and optimize the code 
 int PIXEL_TYPE = WS2812; // iLED's must all be of type WS2812!!
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
 
-
-const byte ROWS = 3;
+// set up keypad buttons
+const byte ROWS = 4;
 const byte COLS = 3;
 
-// set up keypad buttons
-char keys[ROWS][COLS] = {
-  {'1','2','3'},
-  {'4','5','6'},// This #include statement was automatically added by the Particle IDE.
-#include <Keypad_Particle.h>
-
-// This #include statement was automatically added by the Particle IDE.
-#include <neopixel.h>
-
-// Sets pixel COUNT, PIN and TYPE for the neopixels
-int PIXEL_PIN = D0;
-int PIXEL_COUNT = 4; //FIXME: Change the pixel count to 6 and optimize the code for the 3x3 tic tac toe game later.
-int PIXEL_TYPE = WS2812; // iLED's must all be of type WS2812!!
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
-
-
-const byte ROWS = 3;
-const byte COLS = 3;
-
-// set up keypad buttons
 char keys[ROWS][COLS] = {
   {'1','2','3'},
   {'4','5','6'},
   {'7','8','9'},
+  {'*','0','#'},
 };
 
-byte rowPins[ROWS] = { D7, D6, D5 };
+byte rowPins[ROWS] = { D7, D6, D5, D4 };
 byte colPins[COLS] = { D3, D2, D1 };
 
 // create Keypad object variable called "keypad"
@@ -59,26 +40,36 @@ void setup() {
 // loop() runs over and over again, as quickly as it can execute.
 void loop() {
     
-    static int i = 0;
+    
+    static bool resetGame = true;
     
     // Declaring & initializing iLED Colors
     static int PixelColorCyan = strip.Color(255 , 0, 255); // Declaration & initialization of cyan iLED Color
     static int PixelColorOff = strip.Color(0 , 0, 0); // Declaration & initialization of no iLED Color (off)
-    
-    if (i = 0) {
-    // All LED Colors will initially be off at first iteration of loop() function
-    strip.setPixelColor(0, PixelColorOff);
-    strip.setPixelColor(1, PixelColorOff);
-    strip.setPixelColor(2, PixelColorOff);
-    strip.setPixelColor(3, PixelColorOff);
-    }
     // Declaring a multidimensional array that will store the state of the LED's (on or off). Static data type to ensure that the variable is only initialized once and memory values retained as the loop() function continues looping
     // FIXME: Must change multidimensional array to ledState[3][3] later on when making the actual tic tac to game. Temporarily a 2x2 matrix due to the limitated availability of six iLED's at the time
     
     // Stores the LED states of both characters. Initially, all colors are off, so everything is initialized as false.
-    static bool ledStateP1[2][2] = {false, false, false, false};
-    static bool ledStateP2[2][2] = {false, false, false, false};
+    static bool ledStateP1[2][2] = {false, false, false, false}; // P1 is going to be this microcontroller's player
+    static bool ledStateP2[2][2] = {false, false, false, false}; // P2 is going to be the other microcontroller's player
+    // NOTE: Later on when making the tic tac toe game, through each iteration we will need to particle.publish for each microcontroller and particle.subscribe for each microcontroller. Each microcontroller will update the 
+    // State of the other opponent
     
+    if (resetGame == true) {
+        // Resets the condition of the led states, and turns off all the iLED's, also runs during the first game.
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                ledStateP1[i][j] = false;
+                ledStateP2[i][j] = false;
+            }
+        }
+        strip.setPixelColor(0, PixelColorOff);
+        strip.setPixelColor(1, PixelColorOff);
+        strip.setPixelColor(2, PixelColorOff);
+        strip.setPixelColor(3, PixelColorOff);
+        strip.show();
+        resetGame = false;
+    }
 
     
     int whichLEDOn = -1;
@@ -93,7 +84,7 @@ void loop() {
     Serial.print("This number was pressed: "); // For debugging purposes
     Serial.println(key);
     
-    whichLEDOn = ledToTurnOn(key, ledStateP1, ledStateP2);
+    whichLEDOn = ledToTurnOn(key, ledStateP1, ledStateP2); // Function dtermines which, if any LED should turn on when the button is pressed, and returns -1 if none of them should be turned on
     
     // Setting the color of the LED
     if (whichLEDOn == 0) {
@@ -108,20 +99,15 @@ void loop() {
     else if (whichLEDOn == 3) {
         strip.setPixelColor(3, PixelColorCyan);
     }
+    else if (key == '#') // The '#' key can be used by the player to restart the game, turning off all the LED's and resetting the state of the led states. {
+    resetGame = true;
     
     // For debugging purposes
     Serial.print("Which LED On: ");
     Serial.println(whichLEDOn);
-    
-    
-    
     strip.show();
-  }
-  
-    if (i == 0) {
-    i = 1;
     }
-    
+
 }
 
 /*
@@ -159,9 +145,9 @@ int ledToTurnOn(char keypadNum, bool ledStatePlayer[2][2], const bool ledStateOt
         // FIXME: Finish the rest of this code later on when 3x3 matrices are supported
     }
     else if (keypadNum == '4') {
-        if (ledStatePlayer[1][0] == false && ledStateOtherPlayer[1][0] == false) {
-            ledStatePlayer[1][0] = true;
-            return 2; // Turn on iLED 2
+        if (ledStatePlayer[1][1] == false && ledStateOtherPlayer[1][1] == false) {
+            ledStatePlayer[1][1] = true;
+            return 3; // Turn on iLED 3
             
         }
         else {
@@ -170,9 +156,9 @@ int ledToTurnOn(char keypadNum, bool ledStatePlayer[2][2], const bool ledStateOt
         
     }
     else if (keypadNum == '5') {
-        if (ledStatePlayer[1][1] == false && ledStateOtherPlayer[1][1] == false) {
-            ledStatePlayer[1][1] = true;
-            return 3; // Turn on iLED 3
+        if (ledStatePlayer[1][0] == false && ledStateOtherPlayer[1][0] == false) {
+            ledStatePlayer[1][0] = true;
+            return 2; // Turn on iLED 2
             
         }
         else {
