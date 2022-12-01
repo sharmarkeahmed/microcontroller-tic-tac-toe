@@ -203,16 +203,22 @@ void loop() {
             }
             else if (publishGameWin == true) {
                 if (winData[0] == 'W') {
-                for (int i = 0; i < 3; i++) {
-                // If a win has occured, then the publish data will start with 'W' and contain the three winning numbers. That way, both photons can blink the winning numbers at the same time.
-                // If a win has not occured, winData will only have "L" when published.
-                winData += ledWinningNumbers[i];
-                }
+                    for (int i = 0; i < 3; i++) {
+                    // If a win has occured, then the publish data will start with 'W' and contain the three winning numbers. That way, both photons can blink the winning numbers at the same time.
+                    // If a win has not occured, winData will only have "L" when published.
+                    winData += ledWinningNumbers[i];
+                    }
                 }
                 Particle.publish("P1GameWin", winData);
                 // We are done publishing, so must set these values to false as well
                 waitingToPublish = false;
                 publishGameWin = false;
+                if (winData[0] == 'W') {
+                    blinkLED(); // Blinks just the winning LED's
+                }
+                else {
+                    blinkAllLEDS(); // Blink's all LED's (no one really won)
+                }
             }
             strip.show(); // updates iLED's after the other photon has been notified (so both change colors at the same time).
         }   
