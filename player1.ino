@@ -54,6 +54,12 @@ bool publishGameWin = false; // // If true, particle photon will publish a game 
 bool wait = false; // Once 1 second has elapsed, this will become false. Used to ensure that particle photon waits one second to publish something. 
 String winData; // Data to store information about the win.
 
+// STATE VARIABLES ASSOCIATED WITH SUBSCRIPTION/HANDLER FUNCTIONS
+int p2LED; // Stores the iLED that player 2 turned on
+// Stores the row and column updated for player 2
+int p2RowChange;
+int p2ColChange;
+
 
 // OTHER STATE VARIABLES
 bool resetGame = true;
@@ -61,17 +67,11 @@ bool player1Playing = true; // When the game first starts, player 1 will go firs
 bool player2Playing = false; // When the game first starts, player 2 will go second
 bool updateGame = false; // Initially this is false, but if this is true the states of the other player has changed, so this microcontroller will also have to change as well. 
 
-
-int ledTurnedOnP1; // LED to turn on (P1)
-int ledTurnedOnP2; // LED that P2 Turned on
-
 // Row and column changed by player 1
 int p1RowChange;
 int p1ColChange;
 
-// Row and column changed by player 2
-int p2RowChange;
-int p2ColChange;
+
 
 // Winning LED Numbers will be stored in this array
 int ledWinningNumbers[3];
@@ -85,6 +85,9 @@ int turnOnThisLED(char key);
 int detectWin();
 void blinkLED();
 void blinkAllLEDS();
+
+// Declaration of handler functions
+void P2StateChange(const char *event, const char *data);
 
 // Handler Function Declarations
 
@@ -130,8 +133,9 @@ void loop() {
         }
 
         // Once P2 is done playing, the game will have to be reset
+
         if (updateGame == true) {
-            strip.setPixelColor(ledTurnedOnP2, PixelColorBlue); // This will turn on the LED that was turned on by player 2
+            strip.setPixelColor(p2LED, PixelColorBlue); // This will turn on the LED that was turned on by player 2
             P2State[p2RowChange][p2ColChange] = true;
             updateGame = false; // Done with updating the game
             strip.show(); // Updates LED colors
@@ -187,6 +191,8 @@ void loop() {
                 data = iLED;
                 data += p1RowChange;
                 data += p1ColChange;
+                player1Playing = false;
+                player2Playing = true;
                 Particle.publish("P1StateChange", data);
                 // Data will contain (in order) the iLED value, the p1RowChange, the p1ColChange value for P2 to update their valus.
                 // We are done publishing, so must set these values to false as well
@@ -517,3 +523,20 @@ void blinkAllLEDS() {
 }
 
 // --- Handler Functions ---
+
+/*Description: This is the handler function associated with the particle publishing of a P2 State Change
+*/
+void P2StateChange(const char *event, const char *data) {
+    // After P2 Publishes a state change, player 2 is no longer playing, and player 1 will play after this
+    player2Playing = false;
+    player1Playing = true;
+
+    // FIXME: Figure out a way to convert data[0], data[1], data[2] from strings to integers
+    // Then, initialize p2LED = data[0], p2RowChange = data[1], p2ColChange = data[2] by converting such data from strings to integers
+    // Then, change the state of P1 and P2 using such information, and turn on the associated iLED to blue.
+
+    
+    strip.show();
+    
+    return;
+}
