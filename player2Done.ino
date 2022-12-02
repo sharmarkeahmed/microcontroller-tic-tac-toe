@@ -226,6 +226,7 @@ void loop() {
                 else {
                     blinkAllLEDS(); // Blink's all LED's (no one really won)
                 }
+                resetGame = true;
             }
             strip.show(); // updates iLED's after the other photon has been notified (so both change colors at the same time).
         }   
