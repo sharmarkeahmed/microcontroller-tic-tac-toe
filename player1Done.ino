@@ -466,7 +466,7 @@ int detectWin() {
                 for (int j = 0; j < 3; j++) {
                     if ( ( ( P1State[i][j] == false ) && ( P2State[i][j] == false ) ) ) {
                     finishedGame = false;
-                    }
+                    }   
                 }
             }
             if (finishedGame == true) {
@@ -529,7 +529,7 @@ strip.setPixelColor(iLed Number, Pixel Color) used to change the colors of the L
 void blinkAllLEDS() {
     // For loop to repeat this process three times
     for (int i = 0; i < 9; i++) {
-    strip.setPixelColor(i,PixelColorRed);
+    strip.setPixelColor(i,PixelColorGreen);
     }
     strip.show();
     delay(300); // Delay for .3 seconds
