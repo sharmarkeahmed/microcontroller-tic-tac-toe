@@ -88,6 +88,8 @@ void blinkAllLEDS();
 
 // Declaration of handler functions
 void P1StateChange(const char *event, const char *data);
+void P1ResetGameRequest(const char *event, const char *data);
+void P1GameWin(const char *event, const char *data);
 
 // Handler Function Declarations
 
@@ -97,6 +99,7 @@ void setup() {
     waitingTime = millis() + 1000; // Wait for 1s
     Particle.subscribe("P1StateChange", P1StateChange);
     Particle.subscribe("P1ResetGameRequest", P1ResetGameRequest);
+    Particle.subscribe("P1GameWin", P1GameWin);
 }
 
 void loop() {
