@@ -395,56 +395,56 @@ Global Variables Used:
     P1State & P2State - uses the state of the two players to determine whether or not a win has occured
 */
 int detectWin() {
-    if(P1State[0][0] == P1State[0][1] && P1State[0][0] == P1State[0][2]){
+    if( (P1State[0][0] == true ) && ( P1State[0][1] == true)  && (P1State[0][2] == true) ){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 1;
             ledWinningNumbers[2] = 2;
             return 1;
  
-        } else if(P1State[1][0] == P1State[1][1] && P1State[1][0] == P1State[1][2]){
+        } else if( ( P1State[1][0] == true ) && (P1State[1][1] == true ) && (P1State[1][2] == true) ){
  
             ledWinningNumbers[0] = 5;
             ledWinningNumbers[1] = 4;
             ledWinningNumbers[2] = 3;
             return 1;
  
-        } else if(P1State[2][0] == P1State[2][1] && P1State[2][0] == P1State[2][2]){
+        } else if( ( P1State[2][0] == true ) && ( P1State[2][1] == true ) && ( P1State[2][2] == true )){
  
             ledWinningNumbers[0] = 6;
             ledWinningNumbers[1] = 7;
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if(P1State[0][0] == P1State[1][0] && P1State[0][0] == P1State[2][0]){
+        } else if( (P1State[0][0] == true ) && ( P1State[1][0] == true ) ( P1State[2][0] == true)){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 5;
             ledWinningNumbers[2] = 6;
             return 1;
  
-        } else if(P1State[0][1] == P1State[1][1] && P1State[0][1] == P1State[2][1]){
+        } else if( (P1State[0][1] == true ) && ( P1State[1][1] == true ) && ( P1State[2][1] == true )) {
  
             ledWinningNumbers[0] = 1;
             ledWinningNumbers[1] = 4;
             ledWinningNumbers[2] = 7;
             return 1;
  
-        } else if(P1State[0][2] == P1State[1][2] && P1State[0][2] == P1State[2][2]){
+        } else if( ( P1State[0][2] == true ) && (P1State[1][2] == true ) &&  (P1State[2][2] == true) ){
  
             ledWinningNumbers[0] = 2;
             ledWinningNumbers[1] = 3;
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if(P1State[0][0] == P1State[1][1] && P1State[0][0] == P1State[2][2]){
+        } else if( (P1State[0][0] == true ) && ( P1State[1][1] == true ) && ( P1State[2][2] == true ) ){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 4;
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if(P1State[0][2] == P1State[1][1] && P1State[0][2] == P1State[2][0]){
+        } else if( (P1State[0][2] == true ) && ( P1State[1][1] == true ) && (P1State[2][0] == true)){
  
             ledWinningNumbers[0] = 2;
             ledWinningNumbers[1] = 4;
