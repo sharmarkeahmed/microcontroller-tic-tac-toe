@@ -1,4 +1,4 @@
-// Final Project Code for PLAYER1
+// Final Project Code for PLAYER2
 
 /*
 IMPORTANT: Import the neopixel and Keypad_Particle.h libraries in order to use this code
@@ -55,21 +55,21 @@ bool wait = false; // Once 1 second has elapsed, this will become false. Used to
 String winData; // Data to store information about the win.
 
 // STATE VARIABLES ASSOCIATED WITH SUBSCRIPTION/HANDLER FUNCTIONS
-int p2LED; // Stores the iLED that player 2 turned on
-// Stores the row and column updated for player 2
-int p2RowChange;
-int p2ColChange;
+int p1LED; // Stores the iLED that player 1 turned on
+// Stores the row and column updated for player 1
+int p1RowChange;
+int p1ColChange;
 
 
 // OTHER STATE VARIABLES
 bool resetGame = true;
-bool player1Playing = true; // When the game first starts, player 1 will go first
-bool player2Playing = false; // When the game first starts, player 2 will go second
+bool player1Playing = false; // When the game first starts, player 1 will go first
+bool player2Playing = true; // When the game first starts, player 2 will go second
 bool updateGame = false; // Initially this is false, but if this is true the states of the other player has changed, so this microcontroller will also have to change as well. 
 
-// Row and column changed by player 1
-int p1RowChange;
-int p1ColChange;
+// Row and column changed by player 2
+int p2RowChange;
+int p2ColChange;
 
 
 
@@ -87,7 +87,7 @@ void blinkLED();
 void blinkAllLEDS();
 
 // Declaration of handler functions
-void P2StateChange(const char *event, const char *data);
+void P1StateChange(const char *event, const char *data);
 
 // Handler Function Declarations
 
@@ -95,7 +95,7 @@ unsigned long int waitingTime; // The amount of time to wait
 void setup() {
     strip.begin(); // Initializes the strip of neopixel
     waitingTime = millis() + 1000; // Wait for 1s
-    Particle.subscribe("P2StateChange", P2StateChange);
+    Particle.subscribe("P1StateChange", P1StateChange);
 }
 
 void loop() {
@@ -129,17 +129,17 @@ void loop() {
             resetGame = false;
         }
 
-        // Once P2 is done playing, the game will have to be reset
+        // Once P1 is done playing, the game will have to be reset
 
         if (updateGame == true) {
-            strip.setPixelColor(p2LED, PixelColorBlue); // This will turn on the LED that was turned on by player 2
-            P2State[p2RowChange][p2ColChange] = true;
+            strip.setPixelColor(p1LED, PixelColorBlue); // This will turn on the LED that was turned on by player 2
+            P1State[p1RowChange][p1ColChange] = true;
             updateGame = false; // Done with updating the game
             strip.show(); // Updates LED colors
         }
 
         
-        if ( (player1Playing == true ) ) {
+        if ( (player2Playing == true ) ) {
             // This if statement will only run if player 1 is playing, otherwise must wait for other player to finish
 
             if (key) {
@@ -186,20 +186,20 @@ void loop() {
             if (publishNewChange == true) {
                 String data;
                 data = iLED;
-                data += p1RowChange;
-                data += p1ColChange;
-                player1Playing = false;
-                player2Playing = true;
-                Particle.publish("P1StateChange", data);
-                // Data will contain (in order) the iLED value, the p1RowChange, the p1ColChange value for P2 to update their valus.
+                data += p2RowChange;
+                data += p2ColChange;
+                player1Playing = true;
+                player2Playing = false;
+                Particle.publish("P2StateChange", data);
+                // Data will contain (in order) the iLED value, the p2RowChange, the p2ColChange value for P1 to update their values.
                 // We are done publishing, so must set these values to false as well
                 waitingToPublish = false;
                 publishNewChange = false;
             }
             else if (publishGameReset == true) {
-                Particle.publish("P1ResetGameRequest", "");
-                // Notify P2 that there was a reset game request
-                resetGame = true; // P1 can now reset the game
+                Particle.publish("P2ResetGameRequest", "");
+                // Notify P1 that there was a reset game request
+                resetGame = true; // P2 can now reset the game
                 // We are done publishing, so must set these values to false as well
                 waitingToPublish = false;
                 publishGameReset = false;
@@ -212,7 +212,7 @@ void loop() {
                     winData += ledWinningNumbers[i];
                     }
                 }
-                Particle.publish("P1GameWin", winData);
+                Particle.publish("P2GameWin", winData);
                 // We are done publishing, so must set these values to false as well
                 waitingToPublish = false;
                 publishGameWin = false;
@@ -272,10 +272,10 @@ Output:
 int turnOnThisLED(char key) {
      if (key == '1') {
         if (P1State[0][0] == false && P2State[0][0] == false) {
-            P1State[0][0] = true;
+            P2State[0][0] = true;
         // (note: iLED 0 is associated with Player State[0][0] in multidimensional array for both photons)
-        p1RowChange = 0;
-        p1ColChange = 0;
+        p2RowChange = 0;
+        p2ColChange = 0;
         return 0; // Turn on iLED 0 
 
         }
@@ -286,9 +286,9 @@ int turnOnThisLED(char key) {
     }
     else if (key == '2') {
         if (P1State[0][1] == false && P2State[0][1] == false) {
-            P1State[0][1] = true;
-            p1RowChange = 0;
-            p1ColChange = 1;
+            P2State[0][1] = true;
+            p2RowChange = 0;
+            p2ColChange = 1;
             return 1; // Turn on iLED 1 (note: iLED 1 is associated with Player State[0][1] in multidimensional arrays)
         }
         else {
@@ -297,9 +297,9 @@ int turnOnThisLED(char key) {
     }
     else if (key == '3') {
         if (P1State[0][2] == false && P2State[0][2] == false) {
-            P1State[0][2] = true;
-            p1RowChange = 0;
-            p1ColChange = 2;
+            P2State[0][2] = true;
+            p2RowChange = 0;
+            p2ColChange = 2;
             return 2; // Turn on iLED 2 (note: iLED 2 is associated with Player State[0][2] in multidimensional arrays)
         }
         else {
@@ -308,9 +308,9 @@ int turnOnThisLED(char key) {
     }
     else if (key == '4') {
         if (P1State[1][0] == false && P2State[1][0] == false) {
-            P1State[1][0] = true;
-            p1RowChange = 1;
-            p1ColChange = 0;
+            P2State[1][0] = true;
+            p2RowChange = 1;
+            p2ColChange = 0;
             return 5; // Turn on iLED 5 (note: iLED 5 is associated with Player State[1][0] in multidimensional arrays)
 
         }
@@ -321,9 +321,9 @@ int turnOnThisLED(char key) {
     }
     else if (key == '5') {
         if (P1State[1][1] == false && P2State[1][1] == false) {
-            P1State[1][1] = true;
-            p1RowChange = 1;
-            p1ColChange = 1;
+            P2State[1][1] = true;
+            p2RowChange = 1;
+            p2ColChange = 1;
             return 4; // Turn on iLED 4 (note: iLED 4 is associated with Player State[1][1] in multidimensional arrays)
         }
         else {
@@ -332,9 +332,9 @@ int turnOnThisLED(char key) {
     }   
     else if (key == '6') {
         if (P1State[1][2] == false && P2State[1][2] == false) {
-            P1State[1][2] = true;
-            p1RowChange = 1;
-            p1ColChange = 2;
+            P2State[1][2] = true;
+            p2RowChange = 1;
+            p2ColChange = 2;
             return 3; // Turn on iLED 3 (note: iLED 3 is associated with Player State[1][2] in multidimensional arrays)
         }
         else {
@@ -344,9 +344,9 @@ int turnOnThisLED(char key) {
     }    
     else if (key == '7') {
         if (P1State[2][0] == false && P2State[2][0] == false) {
-            P1State[2][0] = true;
-            p1RowChange = 2;
-            p1ColChange = 0;
+            P2State[2][0] = true;
+            p2RowChange = 2;
+            p2ColChange = 0;
             return 6; // Turn on iLED 6 (note: iLED 6 is associated with Player State[2][0] in multidimensional arrays)
         }
         else {
@@ -355,9 +355,9 @@ int turnOnThisLED(char key) {
     }    
     else if (key == '8') {
         if (P1State[2][1] == false && P2State[2][1] == false) {
-            P1State[2][1] = true;
-            p1RowChange = 2;
-            p1ColChange = 1;
+            P2State[2][1] = true;
+            p2RowChange = 2;
+            p2ColChange = 1;
             return 7; // Turn on iLED 7 (note: iLED 7 is associated with Player State[2][1] in multidimensional arrays)
         } 
         else {
@@ -366,9 +366,9 @@ int turnOnThisLED(char key) {
     }    
     else if (key == '9') {
         if (P1State[2][2] == false && P2State[2][2] == false) {
-            P1State[2][2] = true;
-            p1RowChange = 2;
-            p1ColChange = 2;
+            P2State[2][2] = true;
+            p2RowChange = 2;
+            p2ColChange = 2;
             return 8; // Turn on iLED 8 (note: iLED 8 is associated with Player State[2][2] in multidimensional arrays)
         }
         else {
@@ -395,56 +395,56 @@ Global Variables Used:
     P1State & P2State - uses the state of the two players to determine whether or not a win has occured
 */
 int detectWin() {
-    if(P1State[0][0] == P1State[0][1] && P1State[0][0] == P1State[0][2]){
+    if(P2State[0][0] == P2State[0][1] && P2State[0][0] == P2State[0][2]){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 1;
             ledWinningNumbers[2] = 2;
             return 1;
  
-        } else if(P1State[1][0] == P1State[1][1] && P1State[1][0] == P1State[1][2]){
+        } else if(P2State[1][0] == P2State[1][1] && P2State[1][0] == P2State[1][2]){
  
             ledWinningNumbers[0] = 5;
             ledWinningNumbers[1] = 4;
             ledWinningNumbers[2] = 3;
             return 1;
  
-        } else if(P1State[2][0] == P1State[2][1] && P1State[2][0] == P1State[2][2]){
+        } else if(P2State[2][0] == P2State[2][1] && P2State[2][0] == P2State[2][2]){
  
             ledWinningNumbers[0] = 6;
             ledWinningNumbers[1] = 7;
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if(P1State[0][0] == P1State[1][0] && P1State[0][0] == P1State[2][0]){
+        } else if(P2State[0][0] == P2State[1][0] && P2State[0][0] == P2State[2][0]){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 5;
             ledWinningNumbers[2] = 6;
             return 1;
  
-        } else if(P1State[0][1] == P1State[1][1] && P1State[0][1] == P1State[2][1]){
+        } else if(P2State[0][1] == P2State[1][1] && P2State[0][1] == P2State[2][1]){
  
             ledWinningNumbers[0] = 1;
             ledWinningNumbers[1] = 4;
             ledWinningNumbers[2] = 7;
             return 1;
  
-        } else if(P1State[0][2] == P1State[1][2] && P1State[0][2] == P1State[2][2]){
+        } else if(P2State[0][2] == P2State[1][2] && P2State[0][2] == P2State[2][2]){
  
             ledWinningNumbers[0] = 2;
             ledWinningNumbers[1] = 3;
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if(P1State[0][0] == P1State[1][1] && P1State[0][0] == P1State[2][2]){
+        } else if(P2State[0][0] == P2State[1][1] && P2State[0][0] == P2State[2][2]){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 4;
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if(P1State[0][2] == P1State[1][1] && P1State[0][2] == P1State[2][0]){
+        } else if(P2State[0][2] == P2State[1][1] && P2State[0][2] == P2State[2][0]){
  
             ledWinningNumbers[0] = 2;
             ledWinningNumbers[1] = 4;
@@ -523,26 +523,26 @@ void blinkAllLEDS() {
 
 /*Description: This is the handler function associated with the particle publishing of a P2 State Change
 */
-void P2StateChange(const char *event, const char *data) {
+void P1StateChange(const char *event, const char *data) {
     // After P2 Publishes a state change, player 2 is no longer playing, and player 1 will play after this
     player2Playing = false;
     player1Playing = true;
 
     // ???FIXME: Change the state of P2 using such information, and turn on the associated iLED to blue.
 
-    String p2LedTranslator = String(data[0]);
-    String p2RowChangeTranslator = String(data[1]);
-    String p2ColChangeTranslator = String(data[2]);
+    String p1LedTranslator = String(data[0]);
+    String p1RowChangeTranslator = String(data[1]);
+    String p1ColChangeTranslator = String(data[2]);
 
     //The above are intermediate variables to change the infromation recieved from the particle subscribe
     //to the below variables which are usable in 
 
-    p2LED = p2LedTranslator.toInt();
-    p2RowChange = p2RowChangeTranslator.toInt();
-    p2ColChange = p2ColChangeTranslator.toInt();
+    p1LED = p1LedTranslator.toInt();
+    p1RowChange = p1RowChangeTranslator.toInt();
+    p1ColChange = p1ColChangeTranslator.toInt();
 
-    P1State[p2RowChange][p2ColChange] = true;
-    strip.setPixelColor(p2LED, PixelColorBlue);
+    P1State[p1RowChange][p1ColChange] = true;
+    strip.setPixelColor(p1LED, PixelColorBlue);
 
     strip.show();
     
