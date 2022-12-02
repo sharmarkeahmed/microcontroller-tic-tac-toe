@@ -416,7 +416,7 @@ int detectWin() {
             ledWinningNumbers[2] = 8;
             return 1;
  
-        } else if( (P1State[0][0] == true ) && ( P1State[1][0] == true ) ( P1State[2][0] == true)){
+        } else if( (P1State[0][0] == true ) && ( P1State[1][0] == true ) && ( P1State[2][0] == true) ){
  
             ledWinningNumbers[0] = 0;
             ledWinningNumbers[1] = 5;
