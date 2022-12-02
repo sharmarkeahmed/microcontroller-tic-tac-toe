@@ -464,7 +464,7 @@ int detectWin() {
             bool finishedGame = true; // This will detect whether or not all iLED's are on
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if ( ( P1State[i][j] && P2State[i][j] ) == false ) {
+                    if ( ( ( P1State[i][j] == false ) || ( P2State[i][j] == false ) ) ) {
                     finishedGame = false;
                     }
                 }
