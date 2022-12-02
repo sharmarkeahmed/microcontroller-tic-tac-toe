@@ -85,6 +85,7 @@ int turnOnThisLED(char key);
 int detectWin();
 void blinkLED();
 void blinkAllLEDS();
+void blinkLEDSubscribe();
 
 // Declaration of handler functions
 void P1StateChange(const char *event, const char *data);
@@ -501,6 +502,21 @@ void blinkLED() {
     delay(300); // Delay for .3 seconds
     }
 }
+void blinkLEDSubscribe() {
+    // For loop to repeat this process three times
+    for (int i = 0; i < 3; i++) {
+    strip.setPixelColor(ledWinningNumbers[0],PixelColorBlue);
+    strip.setPixelColor(ledWinningNumbers[1],PixelColorBlue);
+    strip.setPixelColor(ledWinningNumbers[2],PixelColorBlue);
+    strip.show();
+    delay(300); // Delay for .3 seconds
+    strip.setPixelColor(ledWinningNumbers[0],PixelColorOff);
+    strip.setPixelColor(ledWinningNumbers[1],PixelColorOff);
+    strip.setPixelColor(ledWinningNumbers[2],PixelColorOff);
+    strip.show();
+    delay(300); // Delay for .3 seconds
+    }
+}
 /*
 Description: To be used when neither players have won a game, this function will blink all LED's three times. NOTE: Uses delay() blocking code to do the blinking. Will blink green when both lose
 Inputs:
@@ -577,7 +593,7 @@ void P1GameWin(const char *event, const char *data){
         ledWinningNumbers[2] = String(data[3]).toInt();
 
         // Ready to blink LED's
-        blinkLED();
+        blinkLEDSubscribe();
         resetGame = true; // Ready to reset game
     }
 
