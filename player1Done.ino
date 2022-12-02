@@ -548,3 +548,33 @@ void P2StateChange(const char *event, const char *data) {
     
     return;
 }
+
+void P2ResetGameRequest(const char *event, const char *data){
+
+    resetGame = true;
+
+}
+
+void P2GameWin(const char *event, const char *data){
+
+        if (data[0] == 'L') {
+        // Neither player has won, blink all LED's then reset game
+        blinkAllLEDS();
+        resetGame = true;
+    }
+    else {
+        // Need to figure out what the winning LED's are:
+        // Initialize winning numbers to strings, convert strings to integers
+        // Need to take the decimal places of each winning number 
+
+        ledWinningNumbers[0] = String(data[1]).toInt();
+        ledWinningNumbers[1] = String(data[2]).toInt();
+        ledWinningNumbers[2] = String(data[3]).toInt();
+
+        // Ready to blink LED's
+        blinkLED();
+        resetGame = true; // Ready to reset game
+    }
+
+    return;
+}
