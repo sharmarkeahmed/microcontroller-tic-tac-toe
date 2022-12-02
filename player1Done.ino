@@ -63,8 +63,8 @@ int p2ColChange;
 
 // OTHER STATE VARIABLES
 bool resetGame = true;
-bool player1Playing = false; // When the game first starts, player 1 will go first
-bool player2Playing = true; // When the game first starts, player 2 will go second
+bool player1Playing = true; // When the game first starts, player 1 will go first
+bool player2Playing = false; // When the game first starts, player 2 will go second
 bool updateGame = false; // Initially this is false, but if this is true the states of the other player has changed, so this microcontroller will also have to change as well. 
 
 // Row and column changed by player 1
@@ -253,8 +253,8 @@ void startNewGame() {
 
 
     // Updating other state variables
-    player1Playing = false; // When the game first starts, player 1 will go first
-    player2Playing = true; // When the game first starts, player 2 will go second
+    player1Playing = true; // When the game first starts, player 1 will go first
+    player2Playing = false; // When the game first starts, player 2 will go second
     resetGame = false;
     updateGame = false;
     
