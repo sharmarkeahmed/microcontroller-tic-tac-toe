@@ -36,8 +36,8 @@ Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 // --- DECLARING GLOBAL VARIABLES ---
 
 // Declaring & initializing iLED Colors. Note: WS2812 color code is in form strip.Color(Green, Red, Blue)
-int PixelColorRed = strip.Color(0 , 255, 0); // Red LED color (to be used for PLAYER 1)
-int PixelColorBlue = strip.Color(0, 0, 255); // Blue LED Color (to be used for PLAYER 2)
+int PixelColorBlue = strip.Color(0 , 255, 0); // Red LED color (to be used for PLAYER 1)
+int PixelColorRed = strip.Color(0, 0, 255); // Blue LED Color (to be used for PLAYER 2)
 int PixelColorGreen = strip.Color(255, 0, 0); // Green LED Color (to be used in the case of a tie to blink all LED's a few times, see blinkAllLeds())
 int PixelColorOff = strip.Color(0 , 0, 0); // Declaration & initialization of no LED color (off)
 
@@ -529,8 +529,8 @@ void blinkAllLEDS() {
 */
 void P1StateChange(const char *event, const char *data) {
     // After P2 Publishes a state change, player 2 is no longer playing, and player 1 will play after this
-    player2Playing = false;
-    player1Playing = true;
+    player2Playing = true;
+    player1Playing = false;
 
     // ???FIXME: Change the state of P2 using such information, and turn on the associated iLED to blue.
 
