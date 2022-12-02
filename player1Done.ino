@@ -545,7 +545,7 @@ void P2StateChange(const char *event, const char *data) {
     p2RowChange = p2RowChangeTranslator.toInt();
     p2ColChange = p2ColChangeTranslator.toInt();
 
-    P1State[p2RowChange][p2ColChange] = true;
+    P2State[p2RowChange][p2ColChange] = true;
     strip.setPixelColor(p2LED, PixelColorBlue);
 
     strip.show();
