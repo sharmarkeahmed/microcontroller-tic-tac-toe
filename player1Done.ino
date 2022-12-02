@@ -88,6 +88,8 @@ void blinkAllLEDS();
 
 // Declaration of handler functions
 void P2StateChange(const char *event, const char *data);
+void P2ResetGameRequest(const char *event, const char *data);
+void P2GameWin(const char *event, const char *data);
 
 // Handler Function Declarations
 
@@ -96,6 +98,8 @@ void setup() {
     strip.begin(); // Initializes the strip of neopixel
     waitingTime = millis() + 1000; // Wait for 1s
     Particle.subscribe("P2StateChange", P2StateChange);
+    Particle.subscribe("P2ResetGameRequest", P2ResetGameRequest);
+    Particle.subscribe("P2GameWin", P2GameWin);
 }
 
 void loop() {
