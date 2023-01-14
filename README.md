@@ -3,8 +3,14 @@
 ## List of Team Members:
 
 Sharmarke Ahmed (ahme0344@umn.edu)
+
+
 Christopher Dixon (dixon522@umn.edu)
+
+
 Abhay Upadhyaya (upadh066@umn.edu)
+
+
 Brandon Butenhoff (buten033@umn.edu)
 
 
