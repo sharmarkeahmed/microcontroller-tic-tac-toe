@@ -22,6 +22,8 @@ There are three IoT cloud publishes that each photon uses, and each photon subsc
 
 All of the firmware used for the game is located in the firmware.ino file. Before flashing to the microcontroller, ensure that the preprocessor directives are configured to set one of the photons as PLAYER1 and the other photon as PLAYER2. Refer to the comments in the firmware.ino file for a more thorough explanation on this. Both microcontrollers must be registered under the same Particle Photon user account in order for the game to work. Additionally, both the keypad particle and neopixel libraries must be imported in order to use the firmware.
 
+Two external libraries, Keypad Particle & Neopixel libraries were used for this project
+
 ## List of Project Files:
 
 firmware.ino
